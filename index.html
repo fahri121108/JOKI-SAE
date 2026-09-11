@@ -3,515 +3,722 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JOKI SAE | Layanan Joki Terpercaya</title>
+    <title>FAHRI STORE — Joki Steal A Eggs</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        utama: '#06B6D4',
-                        sekunder: '#8B5CF6',
-                        aksen: '#FBBF24',
-                        gelap: '#0F172A',
-                        kartu: '#1E293B',
-                        hijauwa: '#25D366',
-                    },
-                    fontFamily: { poppins: ['Poppins', 'sans-serif'] }
+                        primary: '#6366F1',
+                        secondary: '#F59E0B',
+                        success: '#10B981',
+                        danger: '#EF4444',
+                        dark: '#1F2937',
+                        'dark-light': '#374151',
+                        'gray-light': '#9CA3AF',
+                        'bg-dark': '#111827',
+                        card: '#1F2937',
+                    }
                 }
             }
         }
     </script>
     <style>
-        * { font-family: 'Poppins', sans-serif; }
-        .kaca { background: rgba(30, 41, 59, 0.75); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.08); }
-        .teks-gradasi { background: linear-gradient(90deg, #06B6D4, #8B5CF6); -webkit-background-clip: text; color: transparent; }
-        .latar-gradasi { background: linear-gradient(135deg, #06B6D4, #8B5CF6); }
-        .naik-hover { transition: all 0.3s ease; }
-        .naik-hover:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(6,182,212,0.15); }
-        .berkedip { animation: berkedip 2s infinite; }
-        @keyframes berkedip {
-            0%,100% { box-shadow: 0 0 15px rgba(6,182,212,0.4); }
-            50% { box-shadow: 0 0 30px rgba(139,92,246,0.5); }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        * { font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background: linear-gradient(135deg, #111827 0%, #1F2937 100%); min-height: 100vh; padding-bottom: 90px; }
+        .page { display: none; animation: fadeIn 0.3s ease; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .banner-track { overflow: hidden; white-space: nowrap; }
+        .banner-content { display: inline-block; animation: scroll 20s linear infinite; }
+        @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+        .btn { transition: all 0.3s ease; }
+        .btn:active { transform: scale(0.97); }
+        .card { transition: all 0.3s ease; }
+        .card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+        .input-field { transition: all 0.3s ease; border: 2px solid transparent; }
+        .input-field:focus { border-color: #6366F1; box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15); outline: none; }
+        .input-field.error { border-color: #EF4444; animation: shake 0.4s ease; }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
         }
-        .banner-jalan { animation: geser 25s linear infinite; }
-        @keyframes geser { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-        .muncul { animation: muncul 0.35s ease forwards; }
-        @keyframes muncul { from { opacity:0; transform:scale(0.95); } to { opacity:1; transform:scale(1); } }
-        .halaman { display: none; opacity: 0; transition: opacity 0.3s ease; }
-        .halaman.aktif { display: block; opacity: 1; }
-        .aktif-nav { color: #06B6D4 !important; border-bottom: 2px solid #06B6D4; }
+        .nav-item { transition: all 0.25s ease; }
+        .nav-item.active { color: #6366F1; transform: translateY(-2px); }
+        .modal-bg { background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(8px); }
+        .toast-error { animation: slideIn 0.3s ease, fadeOut 0.3s ease 2.5s forwards; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+        .modal-alihkan {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.75);
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-alihkan.show {
+            display: flex;
+        }
+        .loading-spinner {
+            width: 42px;
+            height: 42px;
+            border: 3px solid #374151;
+            border-top-color: #6366F1;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
     </style>
 </head>
-<body class="bg-gelap text-white min-h-screen">
+<body class="text-white">
 
-    <!-- ✅ BANNER BERJALAN -->
-    <div class="bg-gradient-to-r from-utama to-sekunder py-2 overflow-hidden">
-        <div class="banner-jalan whitespace-nowrap font-medium">
-            ⚡ SELAMAT DATANG DI JOKI SAE ⚡ JOKI EGGS Rp 7.000/HARI ⚡ JOKI TREADMILL + EGGS Rp 15.000/HARI ⚡ Hubungi WhatsApp: 0895-3174-6761 ⚡
+    <header class="sticky top-0 z-50 bg-bg-dark/80 backdrop-blur-md border-b border-white/5">
+        <div class="px-5 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center font-bold text-lg">F</div>
+                <div>
+                    <h1 class="font-bold text-lg">FAHRI STORE</h1>
+                    <p class="text-xs text-gray-light">Joki Steal A Eggs • Terpercaya</p>
+                </div>
+            </div>
+            <button id="headerWA" class="w-10 h-10 rounded-full bg-success/20 flex items-center justify-center text-success text-lg">
+                <i class="fa fa-whatsapp"></i>
+            </button>
+        </div>
+    </header>
+
+    <div id="toastContainer" class="fixed top-20 left-0 right-0 z-[90] px-4 pointer-events-none flex flex-col items-center gap-2"></div>
+
+    <div id="modalAlihkan" class="modal-alihkan">
+        <div class="bg-card rounded-2xl p-8 w-full max-w-sm mx-4 border border-white/10 text-center">
+            <div class="loading-spinner mx-auto mb-4"></div>
+            <h3 class="text-lg font-bold mb-2">Sedang mengalihkan...</h3>
+            <p class="text-gray-light text-sm">Mohon menunggu sebentar</p>
         </div>
     </div>
 
-    <!-- ✅ NAVIGASI -->
-    <nav class="sticky top-0 z-50 bg-gelap/90 backdrop-blur-sm py-3 px-4 border-b border-gray-800">
-        <div class="container mx-auto">
-            <div class="flex justify-between items-center">
-                <span class="text-xl font-extrabold teks-gradasi">JOKI SAE</span>
-                
-                <!-- MENU DEKSTOP -->
-                <div class="hidden md:flex items-center gap-1 text-sm">
-                    <button onclick="bukaHalaman('beranda')" id="nav-beranda" class="px-4 py-2 rounded-t-lg aktif-nav">Beranda</button>
-                    <button onclick="bukaHalaman('layanan')" id="nav-layanan" class="px-4 py-2 rounded-t-lg hover:text-gray-300">Layanan</button>
-                    <button onclick="bukaHalaman('caraorder')" id="nav-caraorder" class="px-4 py-2 rounded-t-lg hover:text-gray-300">Cara Order</button>
-                    <button onclick="bukaHalaman('testimoni')" id="nav-testimoni" class="px-4 py-2 rounded-t-lg hover:text-gray-300">Testimoni</button>
-                    <button onclick="bukaHalaman('bantuan')" id="nav-bantuan" class="px-4 py-2 rounded-t-lg hover:text-gray-300">Bantuan</button>
+    <main class="px-5 pt-5 max-w-lg mx-auto">
+
+        <div id="beranda" class="page active">
+            <div class="space-y-5">
+                <div class="text-center py-4">
+                    <img src="profil.jpg" alt="FAHRI STORE" class="w-28 h-28 rounded-2xl object-cover mx-auto shadow-lg border-2 border-primary/20">
+                    <h2 class="text-2xl font-bold mt-4">Selamat Datang! 🎉</h2>
+                    <p class="text-gray-light text-sm mt-2">Pilih layanan joki terbaik untuk kamu</p>
                 </div>
 
-                <!-- ✅ TOMBOL WA HEADER -->
-                <a href="https://wa.me/6289531746761" target="_blank" class="hidden md:inline-flex items-center gap-2 bg-hijauwa px-4 py-2 rounded-full text-sm font-semibold hover:bg-hijauwa/90">
-                    <i class="fa fa-whatsapp"></i> Chat WA
-                </a>
-                
-                <!-- ✅ TOMBOL MENU HP -->
-                <button onclick="toggleMenuHP()" class="md:hidden text-2xl p-2">
-                    <i class="fa fa-bars"></i>
+                <div class="bg-primary/10 rounded-xl p-3 border border-primary/20">
+                    <div class="banner-track">
+                        <div class="banner-content text-sm font-medium text-primary">
+                            <span class="px-4">⚡ PROSES CEPAT 24 JAM</span>
+                            <span class="px-4">💎 AMANAH & TERPERCAYA</span>
+                            <span class="px-4">🔒 DATA DIJAGA AMAN</span>
+                            <span class="px-4">💸 HARGA TERJANGKAU</span>
+                            <span class="px-4">⚡ PROSES CEPAT 24 JAM</span>
+                            <span class="px-4">💎 AMANAH & TERPERCAYA</span>
+                            <span class="px-4">🔒 DATA DIJAGA AMAN</span>
+                            <span class="px-4">💸 HARGA TERJANGKAU</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-card rounded-xl p-4 border border-white/5">
+                        <span class="text-2xl">⚡</span>
+                        <h3 class="font-semibold mt-2 text-sm">Pengerjaan Cepat</h3>
+                        <p class="text-xs text-gray-light mt-1">Selesai tepat waktu</p>
+                    </div>
+                    <div class="bg-card rounded-xl p-4 border border-white/5">
+                        <span class="text-2xl">🛡️</span>
+                        <h3 class="font-semibold mt-2 text-sm">Aman & Terpercaya</h3>
+                        <p class="text-xs text-gray-light mt-1">Privasi terjamin</p>
+                    </div>
+                    <div class="bg-card rounded-xl p-4 border border-white/5">
+                        <span class="text-2xl">💬</span>
+                        <h3 class="font-semibold mt-2 text-sm">Layanan 24 Jam</h3>
+                        <p class="text-xs text-gray-light mt-1">Respon cepat</p>
+                    </div>
+                    <div class="bg-card rounded-xl p-4 border border-white/5">
+                        <span class="text-2xl">🎁</span>
+                        <h3 class="font-semibold mt-2 text-sm">Harga Termurah</h3>
+                        <p class="text-xs text-gray-light mt-1">Banyak promo</p>
+                    </div>
+                </div>
+
+                <button data-goto="produk" class="w-full bg-gradient-to-r from-primary to-primary/80 text-white py-4 rounded-xl font-bold text-lg btn shadow-lg">
+                    🛒 LIHAT SEMUA PRODUK
+                </button>
+                <button id="btnProdukLainnya" class="w-full bg-card border border-secondary/30 text-secondary py-3 rounded-xl font-semibold btn">
+                    📂 PRODUK LAINNYA
                 </button>
             </div>
-            
-            <!-- ✅ MENU HP -->
-            <div id="menuHP" class="md:hidden hidden mt-3 kaca rounded-xl overflow-hidden">
-                <div class="flex flex-col py-2">
-                    <button onclick="bukaHalaman('beranda'); toggleMenuHP();" class="px-5 py-3 text-left hover:bg-utama/20">🏠 Beranda</button>
-                    <button onclick="bukaHalaman('layanan'); toggleMenuHP();" class="px-5 py-3 text-left hover:bg-utama/20">🛒 Layanan Joki</button>
-                    <button onclick="bukaHalaman('caraorder'); toggleMenuHP();" class="px-5 py-3 text-left hover:bg-utama/20">📝 Cara Order</button>
-                    <button onclick="bukaHalaman('testimoni'); toggleMenuHP();" class="px-5 py-3 text-left hover:bg-utama/20">⭐ Testimoni</button>
-                    <button onclick="bukaHalaman('bantuan'); toggleMenuHP();" class="px-5 py-3 text-left hover:bg-utama/20">❓ Bantuan</button>
-                    <hr class="border-gray-700 my-2">
-                    <a href="https://wa.me/6289531746761" target="_blank" class="flex items-center justify-center gap-2 bg-hijauwa/20 text-hijauwa mx-4 py-2 rounded-lg mb-2">
-                        <i class="fa fa-whatsapp"></i> 0895-3174-6761
-                    </a>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <!-- ✅ KONTEN UTAMA -->
-    <main class="container mx-auto px-4 py-6">
-        
-        <!-- 🏠 HALAMAN BERANDA -->
-        <div id="hal-beranda" class="halaman aktif">
-            <div class="max-w-4xl mx-auto">
-                <div class="grid md:grid-cols-2 gap-8 items-center">
-                    <div>
-                        <h1 class="text-4xl font-extrabold mb-4">Layanan Joki<br><span class="teks-gradasi">Cepat & Terpercaya</span></h1>
-                        <p class="text-gray-400 mb-6">Pilih layanan, tentukan jumlah hari, harga terhitung otomatis. Langsung proses, aman dan transparan.</p>
-                        <div class="flex flex-wrap gap-3 mb-8">
-                            <button onclick="bukaHalaman('layanan')" class="latar-gradasi px-6 py-3 rounded-full font-semibold hover:opacity-90 berkedip">Pesan Sekarang →</button>
-                            <a href="https://wa.me/6289531746761" target="_blank" class="inline-flex items-center gap-2 bg-hijauwa px-5 py-3 rounded-full font-semibold hover:bg-hijauwa/90">
-                                <i class="fa fa-whatsapp"></i> Hubungi WA
-                            </a>
-                        </div>
-                        <div class="grid grid-cols-3 gap-4 text-sm">
-                            <div class="kaca p-3 rounded-xl text-center"><i class="fa fa-bolt text-aksen text-xl mb-1"></i><p>Cepat</p></div>
-                            <div class="kaca p-3 rounded-xl text-center"><i class="fa fa-shield text-utama text-xl mb-1"></i><p>Aman</p></div>
-                            <div class="kaca p-3 rounded-xl text-center"><i class="fa fa-calculator text-sekunder text-xl mb-1"></i><p>Otomatis</p></div>
-                        </div>
-                    </div>
-                    <div class="kaca p-6 rounded-2xl text-center">
-                        <h3 class="font-bold text-lg mb-4">📞 Hubungi Kami</h3>
-                        <p class="text-gray-400 text-sm mb-4">Klik logo WhatsApp untuk langsung chat</p>
-                        <div class="w-20 h-20 rounded-full bg-hijauwa/20 flex items-center justify-center mx-auto mb-3">
-                            <i class="fa fa-whatsapp text-hijauwa text-4xl"></i>
-                        </div>
-                        <div class="text-xl font-bold text-hijauwa mb-1">0895-3174-6761</div>
-                        <div class="text-sm text-gray-400 mb>4">a.n FAHRI AL ANNURJANI</div>
-                        <a href="https://wa.me/6289531746761" target="_blank" class="inline-flex items-center gap-2 bg-hijauwa px-5 py-2.5 rounded-full font-semibold hover:bg-hijauwa/90 mt-2">
-                            <i class="fa fa-whatsapp"></i> KLIK UNTUK CHAT
-                        </a>
-                    </div>
-                </div>
-            </div>
         </div>
 
-        <!-- 🛒 HALAMAN LAYANAN -->
-        <div id="hal-layanan" class="halaman">
-            <div class="max-w-4xl mx-auto">
-                <div class="text-center mb-8">
-                    <h2 class="text-2xl font-bold teks-gradasi mb-2">PILIH LAYANAN JOKI</h2>
-                    <p class="text-gray-400 text-sm">Klik paket yang kamu inginkan</p>
+        <div id="produk" class="page">
+            <div class="space-y-4">
+                <div class="flex items-center justify-between mb-2">
+                    <button data-goto="beranda" class="text-gray-light hover:text-white transition-colors">
+                        <i class="fa fa-chevron-left"></i> Kembali
+                    </button>
+                    <h2 class="text-xl font-bold">Daftar Produk</h2>
+                    <div class="w-6"></div>
                 </div>
 
-                <div class="grid md:grid-cols-3 gap-5 mb-8">
-                    <!-- PAKET 1 -->
-                    <div id="kartu1" class="kaca rounded-2xl p-5 naik-hover cursor-pointer border-2 border-transparent" onclick="pilihProduk(1)">
-                        <div class="w-14 h-14 rounded-full bg-utama/20 flex items-center justify-center mb-4"><i class="fa fa-walking text-2xl text-utama"></i></div>
-                        <h3 class="text-lg font-bold mb-1">JOKI TREADMILL</h3>
-                        <p class="text-gray-400 text-sm mb-3">Per Hari</p>
-                        <div class="text-xl font-bold text-utama mb-3">Rp 3.000<span class="text-sm text-gray-400">/hari</span></div>
-                        <span class="inline-block bg-utama/20 text-utama px-3 py-1 rounded-full text-xs font-medium">Pilih →</span>
-                    </div>
-                    <!-- PAKET 2 -->
-                    <div id="kartu2" class="kaca rounded-2xl p-5 naik-hover cursor-pointer border-2 border-transparent" onclick="pilihProduk(2)">
-                        <div class="w-14 h-14 rounded-full bg-sekunder/20 flex items-center justify-center mb-4"><i class="fa fa-egg text-2xl text-sekunder"></i></div>
-                        <h3 class="text-lg font-bold mb-1">JOKI EGGS</h3>
-                        <p class="text-gray-400 text-sm mb-3">Per Hari</p>
-                        <div class="text-xl font-bold text-sekunder mb-3">Rp 7.000<span class="text-sm text-gray-400">/hari</span></div>
-                        <span class="inline-block bg-sekunder/20 text-sekunder px-3 py-1 rounded-full text-xs font-medium">Pilih →</span>
-                    </div>
-                    <!-- PAKET 3 -->
-                    <div id="kartu3" class="kaca rounded-2xl p-5 naik-hover cursor-pointer border-2 border-transparent relative overflow-hidden" onclick="pilihProduk(3)">
-                        <div class="absolute top-2 right-2 latar-gradasi text-white text-xs font-bold px-2 py-0.5 rounded-full">HEMAT</div>
-                        <div class="w-14 h-14 rounded-full bg-aksen/20 flex items-center justify-center mb-4"><i class="fa fa-gift text-2xl text-aksen"></i></div>
-                        <h3 class="text-lg font-bold mb-1">TREADMILL + EGGS</h3>
-                        <p class="text-gray-400 text-sm mb-3">Per Hari</p>
-                        <div class="text-xl font-bold text-aksen mb-3">Rp 15.000<span class="text-sm text-gray-400">/hari</span></div>
-                        <span class="inline-block bg-aksen/20 text-aksen px-3 py-1 rounded-full text-xs font-medium">Pilih →</span>
-                    </div>
-                </div>
-
-                <!-- ✅ KALKULATOR PESANAN -->
-                <div id="bagianPesanan" class="max-w-md mx-auto kaca rounded-2xl p-5 hidden">
-                    <h3 class="text-lg font-bold mb-4 text-center">🧮 RINCIAN PESANAN</h3>
-                    <div class="space-y-3 mb-5">
-                        <div class="flex justify-between"><span class="text-gray-400">Layanan:</span><span id="namaProduk" class="font-semibold text-utama">-</span></div>
-                        <div class="flex justify-between"><span class="text-gray-400">Harga Satuan:</span><span id="hargaSatuan" class="font-medium">-</span></div>
+                <div class="bg-card rounded-xl p-5 border border-white/5 card">
+                    <div class="flex items-start justify-between mb-4">
                         <div>
-                            <label class="text-gray-400 text-sm block mb-2">Jumlah Hari:</label>
-                            <div class="flex items-center gap-3">
-                                <button onclick="ubahHari(-1)" class="w-9 h-9 rounded-full bg-utama/20 text-utama font-bold hover:bg-utama/40">-</button>
-                                <input type="number" id="jumlahHari" min="1" value="1" class="w-16 text-center py-1.5 rounded-lg bg-gelap border border-gray-600 text-lg font-semibold" oninput="hitungTotal()">
-                                <button onclick="ubahHari(1)" class="w-9 h-9 rounded-full bg-utama/20 text-utama font-bold hover:bg-utama/40">+</button>
-                                <span class="text-gray-400 text-sm">Hari</span>
+                            <h3 class="font-bold text-xl">🏃 Joki Treadmill</h3>
+                            <p class="text-gray-light text-sm mt-1">Naikkan level treadmill kamu dengan cepat!</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-secondary font-bold text-lg">Rp 3.000 / hari</span>
+                    </div>
+                    <button data-layanan="Joki Treadmill" data-harga="3000" class="w-full bg-primary text-white py-3 rounded-xl font-semibold pilih-produk btn">
+                        PILIH & PESAN →
+                    </button>
+                </div>
+
+                <div class="bg-card rounded-xl p-5 border border-white/5 card">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <h3 class="font-bold text-xl">🥚 Joki Eggs</h3>
+                            <p class="text-gray-light text-sm mt-1">Dapatkan telur langka dengan mudah!</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-secondary font-bold text-lg">Rp 7.000 / hari</span>
+                    </div>
+                    <button data-layanan="Joki Eggs" data-harga="7000" class="w-full bg-success text-white py-3 rounded-xl font-semibold pilih-produk btn">
+                        PILIH & PESAN →
+                    </button>
+                </div>
+
+                <div class="bg-card rounded-xl p-5 border border-white/5 card">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <h3 class="font-bold text-xl">🏃🥚 Paket Lengkap</h3>
+                            <p class="text-gray-light text-sm mt-1">Treadmill + Eggs, hemat dan cepat!</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-secondary font-bold text-lg">Rp 15.000 / hari</span>
+                    </div>
+                    <button data-layanan="Paket Lengkap (Treadmill + Eggs)" data-harga="15000" class="w-full bg-secondary text-dark py-3 rounded-xl font-semibold pilih-produk btn">
+                        PILIH & PESAN →
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="form" class="page">
+            <div class="space-y-4">
+                <div class="flex items-center justify-between mb-2">
+                    <button data-goto="produk" class="text-gray-light hover:text-white transition-colors">
+                        <i class="fa fa-chevron-left"></i> Kembali
+                    </button>
+                    <h2 class="text-xl font-bold">Data Pesanan</h2>
+                    <div class="w-6"></div>
+                </div>
+
+                <div class="bg-primary/10 rounded-xl p-4 border border-primary/20">
+                    <p class="text-sm text-gray-light">Layanan Dipilih:</p>
+                    <p id="namaProduk" class="font-bold text-lg mt-1">-</p>
+                </div>
+
+                <div class="bg-card rounded-xl p-4 border border-white/5">
+                    <label class="text-sm font-medium text-gray-light">Jumlah Hari</label>
+                    <div class="flex items-center justify-center gap-5 mt-3">
+                        <button type="button" id="kurangiHari" class="w-12 h-12 rounded-full bg-dark-light flex items-center justify-center text-xl font-bold hover:bg-primary/30 transition-colors">−</button>
+                        <input type="number" id="jumlahHari" min="1" value="1" class="w-20 text-center text-xl font-bold bg-transparent border-0 outline-none">
+                        <button type="button" id="tambahHari" class="w-12 h-12 rounded-full bg-dark-light flex items-center justify-center text-xl font-bold hover:bg-primary/30 transition-colors">+</button>
+                    </div>
+                </div>
+
+                <div class="bg-card rounded-xl p-5 border border-white/5 text-center">
+                    <p class="text-sm text-gray-light">Total Pembayaran</p>
+                    <p id="totalHarga" class="text-3xl font-bold text-secondary mt-1">Rp 0</p>
+                    <p id="catatanDiskon" class="text-sm text-success mt-2 hidden">🎉 Paket Mingguan Hemat Diterapkan!</p>
+                </div>
+
+                <div class="bg-card rounded-xl p-5 border border-white/5">
+                    <h3 class="font-bold mb-4 flex items-center gap-2">📋 <span>Data Akun Roblox</span></h3>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium mb-2">
+                            Username Roblox 
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="text" id="inputUsn" placeholder="Masukkan username Roblox kamu" 
+                            class="w-full input-field rounded-xl bg-dark-light px-4 py-3 text-white">
+                        <p id="errUsn" class="text-danger text-xs mt-1 hidden"><i class="fa fa-exclamation-circle mr-1"></i>Wajib diisi!</p>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium mb-2">
+                            Password Roblox
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="password" id="inputPw" placeholder="Masukkan password Roblox kamu" 
+                            class="w-full input-field rounded-xl bg-dark-light px-4 py-3 text-white">
+                        <p id="errPw" class="text-danger text-xs mt-1 hidden"><i class="fa fa-exclamation-circle mr-1"></i>Wajib diisi!</p>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Code Backup (Opsional)</label>
+                        <input type="text" id="inputCode" placeholder="Masukkan kode backup jika ada" 
+                            class="w-full input-field rounded-xl bg-dark-light px-4 py-3 text-white">
+                    </div>
+                </div>
+
+                <div class="bg-danger/10 border border-danger/30 rounded-xl p-3 text-sm text-danger flex items-start gap-2">
+                    <i class="fa fa-info-circle mt-0.5"></i>
+                    <span><strong>Penting:</strong> Kolom bertanda <span class="text-danger">*</span> WAJIB diisi sebelum menekan tombol lanjut!</span>
+                </div>
+
+                <button id="btnKePembayaran" class="w-full bg-gradient-to-r from-success to-success/80 text-white py-4 rounded-xl font-bold text-lg btn shadow-lg">
+                    LANJUT KE PEMBAYARAN →
+                </button>
+            </div>
+        </div>
+
+        <!-- ============== PEMBAYARAN — VERSI DIPERBAIKI ============== -->
+        <div id="pembayaran" class="page">
+            <div class="space-y-4">
+                <div class="flex items-center justify-between mb-2">
+                    <button data-goto="form" class="text-gray-light hover:text-white transition-colors">
+                        <i class="fa fa-chevron-left"></i> Kembali
+                    </button>
+                    <h2 class="text-xl font-bold">💳 Pembayaran</h2>
+                    <div class="w-6"></div>
+                </div>
+
+                <!-- Ringkasan Pesanan -->
+                <div class="bg-card rounded-xl p-5 border border-white/5 shadow-sm">
+                    <h3 class="text-sm font-medium text-gray-light mb-3">Ringkasan Pesanan</h3>
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-light">Produk</span>
+                            <span id="rNama" class="font-medium text-sm text-right">-</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-light">Durasi</span>
+                            <span id="rHari" class="font-medium">-</span>
+                        </div>
+                        <div class="flex justify-between items-center pt-3 border-t border-white/5 mt-2">
+                            <span class="font-bold text-lg">Total Bayar</span>
+                            <span id="rTotal" class="font-bold text-xl text-secondary">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="font-bold text-lg pt-1">Pilih Metode Pembayaran</h3>
+                
+                <!-- DANA -->
+                <div class="bg-gradient-to-r from-blue-900/30 to-blue-600/15 rounded-xl p-5 border border-blue-500/25 shadow-sm">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Logo_DANA.svg/250px-Logo_DANA.svg.png" alt="DANA" class="h-9 w-auto object-contain">
+                            <div>
+                                <h4 class="font-bold text-white">DANA</h4>
+                                <p class="text-xs text-gray-light">089531746761 a.n FAHRI AL ANNURJANI</p>
                             </div>
                         </div>
-                        <hr class="border-gray-700">
-                        <div class="flex justify-between items-center pt-2">
-                            <span class="text-lg font-semibold">TOTAL:</span>
-                            <span id="totalHarga" class="text-2xl font-bold teks-gradasi">Rp 0</span>
+                        <button id="salinDANA" class="px-4 py-2 bg-blue-500/20 text-blue-400 rounded-lg text-sm font-semibold hover:bg-blue-500/40 transition-colors">
+                            Salin
+                        </button>
+                    </div>
+                </div>
+
+                <!-- QRIS -->
+                <div class="bg-gradient-to-r from-emerald-900/30 to-green-600/15 rounded-xl p-5 border border-emerald-500/25 shadow-sm">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/QRIS_logo.svg/250px-QRIS_logo.svg.png" alt="QRIS" class="h-9 w-auto object-contain">
+                            <div>
+                                <h4 class="font-bold text-white">QRIS</h4>
+                                <p class="text-xs text-gray-light">FAHRI STORE — Scan kode untuk bayar</p>
+                            </div>
+                        </div>
+                        <button id="lihatQRIS" class="px-4 py-2 bg-emerald-500/20 text-emerald-400 rounded-lg text-sm font-semibold hover:bg-emerald-500/40 transition-colors">
+                            Lihat
+                        </button>
+                    </div>
+                </div>
+
+                <!-- QRIS Popup -->
+                <div id="popupQRIS" class="fixed inset-0 z-[80] hidden items-center justify-center bg-black/80 backdrop-blur-sm">
+                    <div class="bg-card rounded-2xl p-6 w-full max-w-xs mx-4 border border-white/10 text-center shadow-xl">
+                        <h3 class="font-bold text-lg mb-4 flex items-center justify-center gap-2">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/QRIS_logo.svg/250px-QRIS_logo.svg.png" alt="QRIS" class="h-7 w-auto">
+                            QRIS — FAHRI STORE
+                        </h3>
+                        <img src="qris.jpg" alt="QRIS FAHRI STORE" class="w-full aspect-square rounded-xl mb-4 border border-white/15">
+                        <div class="flex gap-3 mb-3">
+                            <a href="qris.jpg" download="QRIS-FAHRI-STORE.jpg" class="flex-1 py-2.5 bg-secondary/20 text-secondary rounded-lg font-medium hover:bg-secondary/30 transition-colors flex items-center justify-center gap-2">
+                                <i class="fa fa-download"></i> Unduh
+                            </a>
+                            <button id="tutupQRIS" class="flex-1 py-2.5 bg-dark-light rounded-lg font-medium hover:bg-dark-light/80 transition-colors">
+                                Tutup
+                            </button>
+                        </div>
+                        <p class="text-xs text-gray-light">Scan menggunakan aplikasi pembayaran apa saja</p>
+                    </div>
+                </div>
+
+                <!-- Langkah Pembayaran -->
+                <div class="bg-dark-light/30 rounded-xl p-4 text-sm">
+                    <p class="font-medium mb-2">Langkah Pembayaran:</p>
+                    <ol class="text-gray-light space-y-1 text-xs list-decimal list-inside">
+                        <li>Transfer sesuai total ke nomor di atas</li>
+                        <li>Simpan bukti pembayaran</li>
+                        <li>Klik tombol konfirmasi di bawah</li>
+                        <li>Kirim bukti ke WhatsApp Admin</li>
+                    </ol>
+                </div>
+
+                <button id="btnKonfirmasi" class="w-full bg-gradient-to-r from-success to-green-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg mt-2 hover:from-success/90 hover:to-green-600/90 transition-all">
+                    ✅ KONFIRMASI & LANJUT KE WA
+                </button>
+            </div>
+        </div>
+        <!-- ============== END PEMBAYARAN ============== -->
+
+        <div id="lainnya" class="page">
+            <div class="space-y-4">
+                <div class="flex items-center justify-between mb-2">
+                    <button data-goto="beranda" class="text-gray-light hover:text-white transition-colors">
+                        <i class="fa fa-chevron-left"></i> Kembali
+                    </button>
+                    <h2 class="text-xl font-bold">Layanan Lainnya</h2>
+                    <div class="w-6"></div>
+                </div>
+
+                <p class="text-gray-light text-sm mb-4">Temukan informasi & komunitas kami</p>
+
+                <a href="https://whatsapp.com/channel/0029Vb89i0zInlqP8pH6FR2T" target="_blank" class="bg-card rounded-xl p-5 border border-white/5 flex items-center justify-between hover:border-primary/40 hover:bg-primary/5 transition-all">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center text-xl">ℹ️</div>
+                        <div>
+                            <h3 class="font-semibold text-lg">Saluran Info</h3>
+                            <p class="text-sm text-gray-light">Pengumuman & update layanan terbaru</p>
                         </div>
                     </div>
-                    <button onclick="bukaModalBayar()" class="w-full latar-gradasi py-2.5 rounded-xl font-semibold hover:opacity-90 berkedip">Lanjut ke Pembayaran →</button>
-                </div>
-            </div>
-        </div>
+                    <i class="fa fa-chevron-right text-gray-light"></i>
+                </a>
 
-        <!-- 📝 HALAMAN CARA ORDER -->
-        <div id="hal-caraorder" class="halaman">
-            <div class="max-w-3xl mx-auto">
-                <div class="text-center mb-8">
-                    <h2 class="text-2xl font-bold teks-gradasi mb-2">CARA ORDER</h2>
-                    <p class="text-gray-400 text-sm">4 langkah mudah selesai!</p>
-                </div>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-5 mb-8">
-                    <div class="kaca p-5 rounded-xl text-center naik-hover"><div class="w-12 h-12 rounded-full bg-utama/20 flex items-center justify-center mx-auto mb-3 text-lg font-bold text-utama">1</div><h4 class="font-semibold text-sm">Pilih Layanan</h4></div>
-                    <div class="kaca p-5 rounded-xl text-center naik-hover"><div class="w-12 h-12 rounded-full bg-sekunder/20 flex items-center justify-center mx-auto mb-3 text-lg font-bold text-sekunder">2</div><h4 class="font-semibold text-sm">Tentukan Hari</h4></div>
-                    <div class="kaca p-5 rounded-xl text-center naik-hover"><div class="w-12 h-12 rounded-full bg-aksen/20 flex items-center justify-center mx-auto mb-3 text-lg font-bold text-aksen">3</div><h4 class="font-semibold text-sm">Bayar</h4></div>
-                    <div class="kaca p-5 rounded-xl text-center naik-hover"><div class="w-12 h-12 rounded-full bg-hijauwa/20 flex items-center justify-center mx-auto mb-3 text-lg font-bold text-hijauwa">4</div><h4 class="font-semibold text-sm">Kirim Bukti & Data</h4></div>
-                </div>
-                <div class="kaca p-6 rounded-xl text-center">
-                    <h4 class="font-bold text-lg mb-3">Ada Pertanyaan?</h4>
-                    <a href="https://wa.me/6289531746761" target="_blank" class="inline-flex items-center gap-2 bg-hijauwa px-5 py-2.5 rounded-full font-semibold hover:bg-hijauwa/90">
-                        <i class="fa fa-whatsapp"></i> WhatsApp: 0895-3174-6761
-                    </a>
-                </div>
-            </div>
-        </div>
+                <a href="https://whatsapp.com/channel/0029Vb8gXGtFnSz9MuXnnv0j" target="_blank" class="bg-card rounded-xl p-5 border border-white/5 flex items-center justify-between hover:border-secondary/40 hover:bg-secondary/5 transition-all">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-secondary/20 flex items-center justify-center text-xl">⭐</div>
+                        <div>
+                            <h3 class="font-semibold text-lg">Testimoni Pelanggan</h3>
+                            <p class="text-sm text-gray-light">Bukti kepuasan pelanggan kami</p>
+                        </div>
+                    </div>
+                    <i class="fa fa-chevron-right text-gray-light"></i>
+                </a>
 
-        <!-- ⭐ HALAMAN TESTIMONI -->
-        <div id="hal-testimoni" class="halaman">
-            <div class="max-w-4xl mx-auto">
-                <div class="text-center mb-8">
-                    <h2 class="text-2xl font-bold teks-gradasi mb-2">TESTIMONI PENGGUNA</h2>
-                </div>
-                <div class="grid md:grid-cols-3 gap-5">
-                    <div class="kaca p-5 rounded-xl naik-hover"><div class="flex items-center gap-3 mb-3"><div class="w-9 h-9 rounded-full latar-gradasi flex items-center justify-center font-bold">R</div><div><h4 class="font-semibold">Rizky</h4><div class="text-yellow-400 text-xs"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i></div></div></div><p class="text-gray-300 text-sm">"Hitung otomatisnya gampang banget, pengerjaan cepat!"</p></div>
-                    <div class="kaca p-5 rounded-xl naik-hover"><div class="flex items-center gap-3 mb-3"><div class="w-9 h-9 rounded-full bg-gradient-to-r from-sekunder to-aksen flex items-center justify-center font-bold">S</div><div><h4 class="font-semibold">Sari</h4><div class="text-yellow-400 text-xs"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i></div></div></div><p class="text-gray-300 text-sm">"Harga jelas, proses transparan. Sangat direkomendasikan 🔥"</p></div>
-                    <div class="kaca p-5 rounded-xl naik-hover"><div class="flex items-center gap-3 mb-3"><div class="w-9 h-9 rounded-full bg-gradient-to-r from-aksen to-utama flex items-center justify-center font-bold">D</div><div><h4 class="font-semibold">Dimas</h4><div class="text-yellow-400 text-xs"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-half-o"></i></div></div></div><p class="text-gray-300 text-sm">"Bayar tinggal scan QRIS, langsung diproses. Mantap!"</p></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ❓ HALAMAN BANTUAN -->
-        <div id="hal-bantuan" class="halaman">
-            <div class="max-w-2xl mx-auto">
-                <div class="text-center mb-8"><h2 class="text-2xl font-bold teks-gradasi mb-2">PUSAT BANTUAN</h2></div>
-                <div class="space-y-4 mb-8">
-                    <details class="kaca p-4 rounded-xl"><summary class="cursor-pointer font-semibold">❓ Cara order?</summary><p class="text-gray-400 text-sm mt-2">Buka Layanan → pilih paket → isi hari → klik Lanjut ke Pembayaran → ikuti instruksi → kirim bukti & data ke WhatsApp.</p></details>
-                    <details class="kaca p-4 rounded-xl"><summary class="cursor-pointer font-semibold">❓ Metode pembayaran?</summary><p class="text-gray-400 text-sm mt-2">Bisa QRIS (semua e-wallet/bank) atau DANA ke nomor 0895-3174-6761 a.n FAHRI AL ANNURJANI.</p></details>
-                    <details class="kaca p-4 rounded-xl"><summary class="cursor-pointer font-semibold">❓ Kapan pesanan mulai dikerjakan?</summary><p class="text-gray-400 text-sm mt-2">Segera setelah kami menerima bukti pembayaran dan data akun kamu via WhatsApp.</p></details>
-                    <details class="kaca p-4 rounded-xl"><summary class="cursor-pointer font-semibold">❓ Apakah aman memberikan data akun?</summary><p class="text-gray-400 text-sm mt-2">100% aman. Data akun hanya dipakai untuk keperluan layanan dan tidak akan dibagikan ke pihak ketiga.</p></details>
-                </div>
-                <div class="kaca p-6 rounded-xl text-center">
-                    <h4 class="font-bold text-lg mb-3">Masih Butuh Bantuan?</h4>
-                    <a href="https://wa.me/6289531746761" target="_blank" class="inline-flex items-center gap-2 bg-hijauwa px-5 py-2.5 rounded-full font-semibold hover:bg-hijauwa/90">
-                        <i class="fa fa-whatsapp"></i> 0895-3174-6761
-                    </a>
-                </div>
+                <a href="https://chat.whatsapp.com/FbdqLBFjn2XJl99GcklojO" target="_blank" class="bg-card rounded-xl p-5 border border-white/5 flex items-center justify-between hover:border-success/40 hover:bg-success/5 transition-all">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-success/20 flex items-center justify-center text-xl">💬</div>
+                        <div>
+                            <h3 class="font-semibold text-lg">Grup Komunitas JB</h3>
+                            <p class="text-sm text-gray-light">Tempat jual beli & diskusi komunitas Steal A Eggs</p>
+                        </div>
+                    </div>
+                    <i class="fa fa-chevron-right text-gray-light"></i>
+                </a>
             </div>
         </div>
     </main>
 
-    <!-- ✅ FOOTER -->
-    <footer class="py-4 text-center text-xs text-gray-500 border-t border-gray-800 mt-8">
-        © 2026 JOKI SAE • Semua Hak Dilindungi
-    </footer>
-
-    <!-- ✅ MODAL PEMBAYARAN -->
-    <div id="modalBayar" class="fixed inset-0 z-50 flex items-center justify-center px-4 hidden">
-        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="tutupModalBayar()"></div>
-        <div class="relative kaca rounded-2xl p-6 w-full max-w-md max-h-[90vh] overflow-y-auto muncul">
-            <button onclick="tutupModalBayar()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl"><i class="fa fa-times"></i></button>
-            <h3 class="text-xl font-bold text-center mb-5 teks-gradasi">💳 PEMBAYARAN</h3>
-            
-            <div class="bg-utama/10 rounded-xl p-4 mb-5 text-sm">
-                <div class="space-y-2">
-                    <div class="flex justify-between"><span class="text-gray-400">Layanan:</span><span id="mNamaProduk" class="font-medium">-</span></div>
-                    <div class="flex justify-between"><span class="text-gray-400">Durasi:</span><span id="mLamaHari" class="font-medium">-</span></div>
-                    <hr class="border-gray-700">
-                    <div class="flex justify-between text-lg font-bold"><span>Total:</span><span id="mTotalHarga" class="text-utama">-</span></div>
-                </div>
-            </div>
-            
-            <!-- QRIS -->
-            <div class="text-center mb-5">
-                <h4 class="font-semibold mb-3">📷 Scan QRIS</h4>
-                <div class="relative inline-block">
-                    <div class="absolute -inset-1.5 bg-gradient-to-r from-utama to-sekunder rounded-lg blur-sm opacity-40"></div>
-                    <div class="relative bg-white p-3 rounded-lg">
-                        <img src="qris.jpg" alt="QRIS" class="w-44 h-auto mx-auto rounded" onerror="this.src='https://via.placeholder.com/176x176/ffffff/06B6D4?text=QRIS\nJOKI+SAE'">
-                    </div>
-                </div>
-                <p class="text-xs text-gray-400 mt-2">a.n FAHRI STORE</p>
-                <button onclick="unduhQRIS()" class="mt-2 bg-sekunder px-3 py-1.5 rounded-lg text-sm hover:bg-sekunder/80">
-                    <i class="fa fa-download mr-1"></i> Simpan QRIS
-                </button>
-            </div>
-            
-            <div class="flex items-center gap-3 my-4"><hr class="flex-1 border-gray-700"><span class="text-gray-500 text-xs">Atau</span><hr class="flex-1 border-gray-700"></div>
-            
-            <!-- DANA -->
-            <div class="bg-blue-900/30 rounded-xl p-4 mb-5">
-                <h4 class="font-semibold mb-2 text-sm"><i class="fa fa-wallet text-blue-400 mr-2"></i>DANA</h4>
-                <div class="text-lg font-bold mb-1">0895-3174-6761</div>
-                <div class="text-xs text-gray-400">a.n FAHRI AL ANNURJANI</div>
-                <button onclick="salinTeks('089531746761', 'Nomor berhasil disalin!')" class="mt-2 text-xs bg-blue-600/40 px-3 py-1 rounded hover:bg-blue-600">
-                    <i class="fa fa-copy mr-1"></i> Salin Nomor
-                </button>
-            </div>
-            
-            <button onclick="bukaModalBerhasil()" class="w-full latar-gradasi py-2.5 rounded-xl font-semibold hover:opacity-90">
-                ✅ Saya Sudah Membayar
+    <nav class="fixed bottom-0 left-0 right-0 z-50 bg-bg-dark/80 backdrop-blur-md border-t border-white/5 px-6 py-3">
+        <div class="flex justify-between items-center max-w-lg mx-auto">
+            <button data-goto="beranda" class="nav-item flex flex-col items-center py-1 px-2 text-xs text-gray-light active">
+                <span class="text-xl mb-1">🏠</span>
+                <span>Beranda</span>
             </button>
+            <button data-goto="produk" class="nav-item flex flex-col items-center py-1 px-2 text-xs text-gray-light">
+                <span class="text-xl mb-1">🛒</span>
+                <span>Produk</span>
+            </button>
+            <button id="navWA" class="nav-item flex flex-col items-center py-1 px-2 text-xs text-gray-light">
+                <span class="text-xl mb-1">💬</span>
+                <span>Hubungi</span>
+            </button>
+            <button data-goto="lainnya" class="nav-item flex flex-col items-center py-1 px-2 text-xs text-gray-light">
+                <span class="text-xl mb-1">📂</span>
+                <span>Lainnya</span>
+            </button>
+        </div>
+    </nav>
+
+    <div id="modalSukses" class="fixed inset-0 z-[100] hidden items-center justify-center modal-bg">
+        <div class="bg-card rounded-2xl p-6 w-full max-w-sm mx-4 border border-white/10 text-center">
+            <div class="text-5xl mb-4">✅</div>
+            <h3 class="text-xl font-bold text-success mb-2">Pesanan Siap!</h3>
+            <p class="text-gray-light text-sm mb-5">Buka WhatsApp untuk kirim bukti pembayaran ke Admin</p>
+            <div class="flex gap-3">
+                <button id="tutupModalSukses" class="flex-1 py-3 rounded-xl bg-dark-light font-medium hover:bg-dark-light/80 transition-colors">Nanti</button>
+                <button id="kirimWA" class="flex-1 py-3 rounded-xl bg-success text-white font-bold hover:bg-success/90 transition-colors">KIRIM KE WA</button>
+            </div>
         </div>
     </div>
 
-    <!-- ✅ MODAL BERHASIL & KIRIM DATA -->
-    <div id="modalBerhasil" class="fixed inset-0 z-50 flex items-center justify-center px-4 hidden">
-        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm"></div>
-        <div class="relative kaca rounded-2xl p-6 w-full max-w-md max-h-[90vh] overflow-y-auto muncul">
-            <div class="text-center mb-5">
-                <div class="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-3">
-                    <i class="fa fa-check-circle text-green-400 text-3xl"></i>
-                </div>
-                <h3 class="text-lg font-bold text-green-400 mb-2">SELANJUTNYA</h3>
-                <p class="text-gray-400 text-sm">Salin pesan, isi data akun, lalu kirim ke WhatsApp</p>
+    <div id="modalWA" class="fixed inset-0 z-[100] hidden items-center justify-center modal-bg">
+        <div class="bg-card rounded-2xl p-6 w-full max-w-sm mx-4 border border-white/10 text-center">
+            <div class="w-16 h-16 rounded-full bg-success/20 flex items-center justify-center text-3xl mx-auto mb-4">
+                <i class="fa fa-whatsapp text-success"></i>
             </div>
-            
-            <div class="bg-yellow-500/10 rounded-xl p-4 mb-4 text-sm">
-                <p class="font-semibold text-yellow-400 mb-2 text-xs">📋 Salin pesan ini:</p>
-                <div id="teksWA" class="bg-gelap p-3 rounded-lg text-xs text-gray-300 whitespace-pre-line mb-2">
--= PESANAN JOKI SAE =-
-Layanan: -
-Durasi: - Hari
-Total Bayar: -
-
---- DATA AKUN ---
-ID Akun:
-Server / Zone:
-Nama Akun:
-Catatan:
-                </div>
-                <button onclick="salinTeks(document.getElementById('teksWA').innerText, 'Pesan berhasil disalin!')" class="w-full bg-yellow-600/40 py-1.5 rounded text-xs hover:bg-yellow-600/60">
-                    <i class="fa fa-copy mr-1"></i> Salin Teks
-                </button>
-            </div>
-            
-            <div class="space-y-2.5 mb-4">
-                <input type="text" id="inId" placeholder="ID Akun" class="w-full p-2.5 rounded-lg bg-gelap border border-gray-600 text-sm" oninput="perbaruiTeksWA()">
-                <input type="text" id="inServer" placeholder="Server / Zone" class="w-full p-2.5 rounded-lg bg-gelap border border-gray-600 text-sm" oninput="perbaruiTeksWA()">
-                <input type="text" id="inNama" placeholder="Nama Akun" class="w-full p-2.5 rounded-lg bg-gelap border border-gray-600 text-sm" oninput="perbaruiTeksWA()">
-                <textarea id="inCatatan" placeholder="Catatan tambahan (opsional)" class="w-full p-2.5 rounded-lg bg-gelap border border-gray-600 text-sm h-16 resize-none" oninput="perbaruiTeksWA()"></textarea>
-            </div>
-            
-            <a href="https://wa.me/6289531746761" target="_blank" class="block w-full bg-hijauwa py-2.5 rounded-xl font-semibold text-center hover:bg-hijauwa/90 mb-3">
-                <i class="fa fa-whatsapp mr-2"></i> Buka WhatsApp & Kirim
+            <h3 class="text-xl font-bold mb-1">Hubungi Admin</h3>
+            <p class="text-gray-light mb-5">+62 83138272645</p>
+            <a href="https://wa.me/6283138272645" target="_blank" class="block w-full bg-success text-white py-3 rounded-xl font-bold mb-3 hover:bg-success/90 transition-colors">
+                <i class="fa fa-paper-plane mr-2"></i> CHAT LANGSUNG
             </a>
-            <button onclick="tutupSemuaModal()" class="w-full bg-gray-700/50 py-2 rounded text-sm hover:bg-gray-700">
-                Tutup
-            </button>
+            <button id="tutupModalWA" class="w-full bg-dark-light py-2.5 rounded-xl hover:bg-dark-light/80 transition-colors">Tutup</button>
         </div>
-    </div>
-
-    <!-- ✅ NOTIFIKASI -->
-    <div id="notif" class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-green-600 text-white px-4 py-2.5 rounded-xl shadow-2xl opacity-0 invisible transition-all duration-300 z-50 text-sm">
-        <i class="fa fa-check-circle mr-2"></i><span id="teksNotif">Berhasil!</span>
     </div>
 
     <script>
-        // ⚙️ DATA PRODUK
-        const daftarProduk = [
-            { id: 1, nama: "JOKI TREADMILL", harga: 3000, warna: "utama" },
-            { id: 2, nama: "JOKI EGGS", harga: 7000, warna: "sekunder" },
-            { id: 3, nama: "JOKI TREADMILL + EGGS", harga: 15000, warna: "aksen" }
-        ];
-        let produkTerpilih = null;
-        let jumlahHari = 1;
+        const NO_WA = '6283138272645';
+        const LINK_PRODUK_LAINNYA = 'https://fahri-store-two.vercel.app/';
+        let hargaPerHari = 0;
+        let namaLayananGlobal = '';
+        let pesananData = {};
 
-        // 📄 GANTI HALAMAN
-        function bukaHalaman(namaHalaman) {
-            document.querySelectorAll('.halaman').forEach(h => h.classList.remove('aktif'));
-            document.getElementById(`hal-${namaHalaman}`).classList.add('aktif');
-            
-            document.querySelectorAll('[id^="nav-"]').forEach(n => n.classList.remove('aktif-nav'));
-            const nav = document.getElementById(`nav-${namaHalaman}`);
-            if (nav) nav.classList.add('aktif-nav');
-            
+        function bukaModalAlihkan() {
+            const modal = document.getElementById('modalAlihkan');
+            modal.classList.add('show');
+            setTimeout(() => {
+                window.open(LINK_PRODUK_LAINNYA, '_blank');
+                modal.classList.remove('show');
+            }, 1200);
+        }
+        document.getElementById('btnProdukLainnya').addEventListener('click', bukaModalAlihkan);
+
+        function showToastError(pesan) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'toast-error bg-danger/90 text-white px-4 py-2.5 rounded-lg shadow-lg text-sm font-medium flex items-center gap-2 max-w-sm w-full';
+            toast.innerHTML = `<i class="fa fa-exclamation-circle"></i> ${pesan}`;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        function bukaHalaman(idHalaman) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(idHalaman).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.querySelector(`[data-goto="${idHalaman}"]`)?.classList.add('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // 📱 MENU HP
-        function toggleMenuHP() {
-            document.getElementById('menuHP').classList.toggle('hidden');
-        }
-
-        // 🛒 PILIH PRODUK
-        function pilihProduk(indeks) {
-            // Reset kartu
-            document.querySelectorAll('[id^="kartu"]').forEach(k => {
-                k.classList.remove('border-utama', 'border-sekunder', 'border-aksen');
-                k.classList.add('border-transparent');
+        document.querySelectorAll('[data-goto]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                bukaHalaman(this.getAttribute('data-goto'));
             });
-            
-            produkTerpilih = daftarProduk[indeks - 1];
-            jumlahHari = 1;
-            
-            // Highlight kartu terpilih
-            const kartu = document.getElementById(`kartu${indeks}`);
-            kartu.classList.remove('border-transparent');
-            kartu.classList.add(`border-${produkTerpilih.warna}`);
-            
-            // Tampilkan kalkulator
-            document.getElementById('bagianPesanan').classList.remove('hidden');
-            document.getElementById('namaProduk').textContent = produkTerpilih.nama;
-            document.getElementById('hargaSatuan').textContent = `Rp ${produkTerpilih.harga.toLocaleString('id-ID')} / hari`;
-            document.getElementById('jumlahHari').value = 1;
-            
-            hitungTotal();
-        }
+        });
 
-        // ➕ UBAH JUMLAH HARI
-        function ubahHari(tambah) {
-            const input = document.getElementById('jumlahHari');
-            let nilai = parseInt(input.value) || 1;
-            nilai = Math.max(1, nilai + tambah);
-            input.value = nilai;
-            jumlahHari = nilai;
-            hitungTotal();
-        }
+        document.querySelectorAll('.pilih-produk').forEach(btn => {
+            btn.addEventListener('click', function() {
+                namaLayananGlobal = this.getAttribute('data-layanan');
+                hargaPerHari = parseInt(this.getAttribute('data-harga'));
+                document.getElementById('namaProduk').textContent = namaLayananGlobal + ' — Rp ' + hargaPerHari.toLocaleString('id-ID') + '/hari';
+                document.getElementById('jumlahHari').value = 1;
+                document.getElementById('inputUsn').value = '';
+                document.getElementById('inputPw').value = '';
+                document.getElementById('inputCode').value = '';
+                document.getElementById('inputUsn').classList.remove('error');
+                document.getElementById('inputPw').classList.remove('error');
+                document.getElementById('errUsn').classList.add('hidden');
+                document.getElementById('errPw').classList.add('hidden');
+                hitungTotal();
+                bukaHalaman('form');
+            });
+        });
 
-        // 🧮 HITUNG TOTAL HARGA
         function hitungTotal() {
-            if (!produkTerpilih) return;
-            jumlahHari = Math.max(1, parseInt(document.getElementById('jumlahHari').value) || 1);
-            document.getElementById('jumlahHari').value = jumlahHari;
-            const total = produkTerpilih.harga * jumlahHari;
-            document.getElementById('totalHarga').textContent = `Rp ${total.toLocaleString('id-ID')}`;
+            let hari = parseInt(document.getElementById('jumlahHari').value) || 1;
+            let total = hargaPerHari * hari;
+            const diskon = document.getElementById('catatanDiskon');
+            if (hari === 7 && namaLayananGlobal === 'Joki Treadmill') total = 20000;
+            if (hari === 7 && namaLayananGlobal === 'Joki Eggs') total = 45000;
+            if (hari === 7 && namaLayananGlobal === 'Paket Lengkap (Treadmill + Eggs)') total = 100000;
+            document.getElementById('totalHarga').textContent = 'Rp ' + total.toLocaleString('id-ID');
+            diskon.classList.toggle('hidden', hari !== 7);
         }
 
-        // 💳 MODAL PEMBAYARAN
-        function bukaModalBayar() {
-            if (!produkTerpilih) return;
+        document.getElementById('kurangiHari').addEventListener('click', () => {
+            let val = parseInt(document.getElementById('jumlahHari').value) - 1 || 1;
+            if (val < 1) val = 1;
+            document.getElementById('jumlahHari').value = val;
             hitungTotal();
-            const total = produkTerpilih.harga * jumlahHari;
-            document.getElementById('mNamaProduk').textContent = produkTerpilih.nama;
-            document.getElementById('mLamaHari').textContent = `${jumlahHari} Hari`;
-            document.getElementById('mTotalHarga').textContent = `Rp ${total.toLocaleString('id-ID')}`;
-            document.getElementById('modalBayar').classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-        }
+        });
+        document.getElementById('tambahHari').addEventListener('click', () => {
+            document.getElementById('jumlahHari').value = parseInt(document.getElementById('jumlahHari').value) + 1;
+            hitungTotal();
+        });
+        document.getElementById('jumlahHari').addEventListener('input', hitungTotal);
 
-        function tutupModalBayar() {
-            document.getElementById('modalBayar').classList.add('hidden');
-            document.body.style.overflow = 'auto';
-        }
+        document.getElementById('inputUsn').addEventListener('blur', function() {
+            if (!this.value.trim()) {
+                this.classList.add('error');
+                document.getElementById('errUsn').classList.remove('hidden');
+            } else {
+                this.classList.remove('error');
+                document.getElementById('errUsn').classList.add('hidden');
+            }
+        });
+        document.getElementById('inputPw').addEventListener('blur', function() {
+            if (!this.value.trim()) {
+                this.classList.add('error');
+                document.getElementById('errPw').classList.remove('hidden');
+            } else {
+                this.classList.remove('error');
+                document.getElementById('errPw').classList.add('hidden');
+            }
+        });
 
-        function bukaModalBerhasil() {
-            tutupModalBayar();
-            perbaruiTeksWA();
-            document.getElementById('modalBerhasil').classList.remove('hidden');
-        }
+        document.getElementById('btnKePembayaran').addEventListener('click', () => {
+            const usn = document.getElementById('inputUsn').value.trim();
+            const pw = document.getElementById('inputPw').value.trim();
+            let bisaLanjut = true;
 
-        function tutupSemuaModal() {
-            document.getElementById('modalBerhasil').classList.add('hidden');
-            document.body.style.overflow = 'auto';
-        }
+            document.getElementById('inputUsn').classList.remove('error');
+            document.getElementById('inputPw').classList.remove('error');
+            document.getElementById('errUsn').classList.add('hidden');
+            document.getElementById('errPw').classList.add('hidden');
 
-        // 📋 SALIN TEKS & UPDATE PESANAN WHATSAPP
-        function buatPesanWA() {
-            if (!produkTerpilih) return '';
-            const total = produkTerpilih.harga * jumlahHari;
-            const id = document.getElementById('inId').value || '';
-            const server = document.getElementById('inServer').value || '';
-            const nama = document.getElementById('inNama').value || '';
-            const catatan = document.getElementById('inCatatan').value || '-';
-            
-            return `-= PESANAN JOKI SAE =-
-Layanan: ${produkTerpilih.nama}
-Durasi: ${jumlahHari} Hari
-Total Bayar: Rp ${total.toLocaleString('id-ID')}
+            if (!usn) {
+                document.getElementById('inputUsn').classList.add('error');
+                document.getElementById('errUsn').classList.remove('hidden');
+                showToastError('⚠️ Silakan isi Username Roblox terlebih dahulu!');
+                bisaLanjut = false;
+            }
+            if (!pw) {
+                document.getElementById('inputPw').classList.add('error');
+                document.getElementById('errPw').classList.remove('hidden');
+                if (usn) showToastError('⚠️ Silakan isi Password Roblox terlebih dahulu!');
+                bisaLanjut = false;
+            }
+            if (!bisaLanjut) return;
 
---- DATA AKUN ---
-ID Akun: ${id || ''}
-Server / Zone: ${server || ''}
-Nama Akun: ${nama || ''}
-Catatan: ${catatan}`;
-        }
+            let hari = parseInt(document.getElementById('jumlahHari').value) || 1;
+            let total = hargaPerHari * hari;
+            if (hari === 7 && namaLayananGlobal === 'Joki Treadmill') total = 20000;
+            if (hari === 7 && namaLayananGlobal === 'Joki Eggs') total = 45000;
+            if (hari === 7 && namaLayananGlobal === 'Paket Lengkap (Treadmill + Eggs)') total = 100000;
 
-        function perbaruiTeksWA() {
-            document.getElementById('teksWA').innerText = buatPesanWA();
-        }
+            pesananData = {
+                nama: namaLayananGlobal,
+                hari: hari,
+                total: total,
+                usn: usn,
+                pw: pw,
+                code: document.getElementById('inputCode').value.trim() || '-'
+            };
 
-        function salinTeks(isi, pesanSukses) {
-            navigator.clipboard.writeText(isi).then(() => {
-                tampilkanNotif(pesanSukses);
-            }).catch(() => {
-                tampilkanNotif('Gagal menyalin, coba lagi');
-            });
-        }
+            document.getElementById('rNama').textContent = namaLayananGlobal;
+            document.getElementById('rHari').textContent = hari + ' Hari';
+            document.getElementById('rTotal').textContent = 'Rp ' + total.toLocaleString('id-ID');
 
-        function unduhQRIS() {
-            const link = document.createElement('a');
-            link.href = 'qris.jpg';
-            link.download = 'QRIS-JOKI-SAE.jpg';
-            link.click();
-            tampilkanNotif('QRIS sedang diunduh...');
-        }
+            bukaHalaman('pembayaran');
+        });
 
-        // 🔔 NOTIFIKASI
-        function tampilkanNotif(pesan) {
-            const notif = document.getElementById('notif');
-            document.getElementById('teksNotif').textContent = pesan;
-            notif.classList.remove('opacity-0', 'invisible');
-            notif.classList.add('opacity-100', 'visible');
+        // === SALIN DANA ===
+        document.getElementById('salinDANA').addEventListener('click', () => {
+            navigator.clipboard.writeText('089531746761');
+            const btn = document.getElementById('salinDANA');
+            const teksAsli = btn.innerHTML;
+            btn.innerHTML = '<i class="fa fa-check mr-1"></i> Tersalin';
+            btn.classList.add('bg-success/20', 'text-success');
+            btn.classList.remove('bg-blue-500/20', 'text-blue-400');
             setTimeout(() => {
-                notif.classList.add('opacity-0', 'invisible');
-                notif.classList.remove('opacity-100', 'visible');
+                btn.innerHTML = teksAsli;
+                btn.classList.remove('bg-success/20', 'text-success');
+                btn.classList.add('bg-blue-500/20', 'text-blue-400');
             }, 2500);
+        });
+
+        // === QRIS POPUP ===
+        document.getElementById('lihatQRIS').addEventListener('click', () => {
+            document.getElementById('popupQRIS').classList.remove('hidden');
+            document.getElementById('popupQRIS').classList.add('flex');
+        });
+        document.getElementById('tutupQRIS').addEventListener('click', () => {
+            document.getElementById('popupQRIS').classList.add('hidden');
+            document.getElementById('popupQRIS').classList.remove('flex');
+        });
+        document.getElementById('popupQRIS').addEventListener('click', e => {
+            if (e.target.id === 'popupQRIS') {
+                document.getElementById('popupQRIS').classList.add('hidden');
+                document.getElementById('popupQRIS').classList.remove('flex');
+            }
+        });
+
+        document.getElementById('btnKonfirmasi').addEventListener('click', () => {
+            document.getElementById('modalSukses').classList.remove('hidden');
+            document.getElementById('modalSukses').classList.add('flex');
+        });
+        document.getElementById('tutupModalSukses').addEventListener('click', () => {
+            document.getElementById('modalSukses').classList.add('hidden');
+            document.getElementById('modalSukses').classList.remove('flex');
+        });
+        document.getElementById('kirimWA').addEventListener('click', () => {
+            const p = pesananData;
+            const teks = `═══════════════════════
+🛒 PESANAN BARU — FAHRI STORE
+═══════════════════════
+
+📦 LAYANAN: ${p.nama}
+⏱️ DURASI: ${p.hari} Hari
+💰 TOTAL: Rp ${p.total.toLocaleString('id-ID')}
+
+👤 DATA AKUN:
+▸ Username : ${p.usn}
+▸ Password : ${p.pw}
+▸ Code Backup : ${p.code}
+
+💳 PEMBAYARAN:
+▸ DANA: 089531746761 a.n FAHRI AL ANNURJANI
+▸ QRIS: a.n FAHRI STORE
+
+✅ Silakan kirim bukti pembayaran di balasan pesan ini
+Terima kasih sudah memesan di FAHRI STORE 🙏
+═══════════════════════`;
+            window.open(`https://wa.me/${NO_WA}?text=${encodeURIComponent(teks)}`, '_blank');
+            document.getElementById('modalSukses').classList.add('hidden');
+            document.getElementById('modalSukses').classList.remove('flex');
+        });
+
+        function bukaModalWA() {
+            document.getElementById('modalWA').classList.remove('hidden');
+            document.getElementById('modalWA').classList.add('flex');
         }
+        document.getElementById('navWA').addEventListener('click', bukaModalWA);
+        document.getElementById('headerWA').addEventListener('click', bukaModalWA);
+        document.getElementById('tutupModalWA').addEventListener('click', () => {
+            document.getElementById('modalWA').classList.add('hidden');
+            document.getElementById('modalWA').classList.remove('flex');
+        });
+        document.getElementById('modalWA').addEventListener('click', e => {
+            if (e.target === document.getElementById('modalWA')) {
+                document.getElementById('modalWA').classList.add('hidden');
+                document.getElementById('modalWA').classList.remove('flex');
+            }
+        });
     </script>
 </body>
 </html>
+
