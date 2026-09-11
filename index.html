@@ -293,8 +293,7 @@
             </div>
         </div>
 
-        <!-- ============== PEMBAYARAN — VERSI DIPERBAIKI ============== -->
-        <div id="pembayaran" class="page">
+                <div id="pembayaran" class="page">
             <div class="space-y-4">
                 <div class="flex items-center justify-between mb-2">
                     <button data-goto="form" class="text-gray-light hover:text-white transition-colors">
@@ -304,7 +303,6 @@
                     <div class="w-6"></div>
                 </div>
 
-                <!-- Ringkasan Pesanan -->
                 <div class="bg-card rounded-xl p-5 border border-white/5 shadow-sm">
                     <h3 class="text-sm font-medium text-gray-light mb-3">Ringkasan Pesanan</h3>
                     <div class="space-y-2">
@@ -326,42 +324,41 @@
                 <h3 class="font-bold text-lg pt-1">Pilih Metode Pembayaran</h3>
                 
                 <!-- DANA -->
-                <div class="bg-gradient-to-r from-blue-900/30 to-blue-600/15 rounded-xl p-5 border border-blue-500/25 shadow-sm">
+                <div class="bg-[#0070F3]/10 rounded-xl p-4 border border-[#0070F3]/30 shadow-sm">
                     <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-4">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Logo_DANA.svg/250px-Logo_DANA.svg.png" alt="DANA" class="h-9 w-auto object-contain">
+                        <div class="flex items-center gap-3">
+                            <div class="w-14 h-9 bg-[#0070F3] rounded-md flex items-center justify-center font-bold text-white text-sm">DANA</div>
                             <div>
                                 <h4 class="font-bold text-white">DANA</h4>
                                 <p class="text-xs text-gray-light">089531746761 a.n FAHRI AL ANNURJANI</p>
                             </div>
                         </div>
-                        <button id="salinDANA" class="px-4 py-2 bg-blue-500/20 text-blue-400 rounded-lg text-sm font-semibold hover:bg-blue-500/40 transition-colors">
+                        <button id="salinDANA" class="px-4 py-2 bg-[#0070F3]/20 text-[#0070F3] rounded-lg text-sm font-semibold hover:bg-[#0070F3]/40 transition-colors">
                             Salin
                         </button>
                     </div>
                 </div>
 
                 <!-- QRIS -->
-                <div class="bg-gradient-to-r from-emerald-900/30 to-green-600/15 rounded-xl p-5 border border-emerald-500/25 shadow-sm">
+                <div class="bg-white/5 rounded-xl p-4 border border-white/15 shadow-sm">
                     <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-4">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/QRIS_logo.svg/250px-QRIS_logo.svg.png" alt="QRIS" class="h-9 w-auto object-contain">
+                        <div class="flex items-center gap-3">
+                            <div class="w-14 h-9 bg-white rounded-md flex items-center justify-center font-bold text-black text-xs">QRIS</div>
                             <div>
                                 <h4 class="font-bold text-white">QRIS</h4>
                                 <p class="text-xs text-gray-light">FAHRI STORE — Scan kode untuk bayar</p>
                             </div>
                         </div>
-                        <button id="lihatQRIS" class="px-4 py-2 bg-emerald-500/20 text-emerald-400 rounded-lg text-sm font-semibold hover:bg-emerald-500/40 transition-colors">
+                        <button id="lihatQRIS" class="px-4 py-2 bg-white/10 text-white rounded-lg text-sm font-semibold hover:bg-white/20 transition-colors">
                             Lihat
                         </button>
                     </div>
                 </div>
 
-                <!-- QRIS Popup -->
                 <div id="popupQRIS" class="fixed inset-0 z-[80] hidden items-center justify-center bg-black/80 backdrop-blur-sm">
                     <div class="bg-card rounded-2xl p-6 w-full max-w-xs mx-4 border border-white/10 text-center shadow-xl">
                         <h3 class="font-bold text-lg mb-4 flex items-center justify-center gap-2">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/QRIS_logo.svg/250px-QRIS_logo.svg.png" alt="QRIS" class="h-7 w-auto">
+                            <div class="w-10 h-7 bg-white rounded flex items-center justify-center font-bold text-black text-xs">QRIS</div>
                             QRIS — FAHRI STORE
                         </h3>
                         <img src="qris.jpg" alt="QRIS FAHRI STORE" class="w-full aspect-square rounded-xl mb-4 border border-white/15">
@@ -377,7 +374,6 @@
                     </div>
                 </div>
 
-                <!-- Langkah Pembayaran -->
                 <div class="bg-dark-light/30 rounded-xl p-4 text-sm">
                     <p class="font-medium mb-2">Langkah Pembayaran:</p>
                     <ol class="text-gray-light space-y-1 text-xs list-decimal list-inside">
@@ -388,12 +384,12 @@
                     </ol>
                 </div>
 
-                <button id="btnKonfirmasi" class="w-full bg-gradient-to-r from-success to-green-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg mt-2 hover:from-success/90 hover:to-green-600/90 transition-all">
+                <button id="btnKonfirmasi" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg mt-2 hover:from-green-500/90 hover:to-emerald-600/90 transition-all">
                     ✅ KONFIRMASI & LANJUT KE WA
                 </button>
             </div>
-        </div>
-        <!-- ============== END PEMBAYARAN ============== -->
+                </div>
+        
 
         <div id="lainnya" class="page">
             <div class="space-y-4">
